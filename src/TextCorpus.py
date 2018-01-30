@@ -3,6 +3,8 @@ import os
 import json
 from nltk import word_tokenize, pos_tag
 from utils import get_word_normal_form, is_word
+from collections import OrderedDict
+from operator import itemgetter
 
 
 class TextCorpus:
@@ -52,4 +54,9 @@ class TextCorpus:
 		)
 
 	def serialize(self, filename):
-		open(filename, 'w', encoding='utf8').write(json.dumps(self.words, ensure_ascii=False))
+		open(filename, 'w', encoding='utf8').write(
+			json.dumps(
+				OrderedDict(sorted(self.words.items(), key=itemgetter(1), reverse=True)),
+				ensure_ascii=False
+			)
+		)
