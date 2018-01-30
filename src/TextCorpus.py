@@ -5,12 +5,13 @@ from nltk import word_tokenize, pos_tag
 from .utils import get_word_normal_form, is_word
 from collections import OrderedDict
 from operator import itemgetter
+import math
 
 
 class TextCorpus:
 
-	def __init__(self):
-		self.data = self.get_initial_data()
+	def __init__(self, json_file=''):
+		self.data = self.get_initial_data() if json_file == '' else self.deserialize(json_file)
 		pass
 
 	@staticmethod
@@ -19,6 +20,13 @@ class TextCorpus:
 			'documents': 0,
 			'termFrequencies': {}
 		}
+
+	def get_idf(self, term):
+		return math.log(
+			self.data['documents'] / max(1, min(1 + (
+				self.data['termFrequencies'][term] if term in self.data['termFrequencies'] else 0
+			), self.data['documents']))
+		)
 
 	def load_from_path(self, path, max_files=9223372036854775807):
 		data = self.get_initial_data()
@@ -75,9 +83,9 @@ class TextCorpus:
 
 	def deserialize(self, filename):
 		if not os.path.isfile(filename):
-			return False
+			return self.data
 		try:
 			self.data = json.loads(open(filename, 'r', encoding='utf8').read(), encoding='utf8')
 		except json.decoder.JSONDecodeError:
-			return False
-		return True
+			return self.data
+		return self.data
