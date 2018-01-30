@@ -35,10 +35,10 @@ class Text:
 			n += 1
 			total_score += score
 			terms.append((
-				word_normalized, # normalized word
-				pair[1],         # tag
-				score,           # raw tf-idf value
-				pair[0]          # original word
+				word_normalized,  # normalized word
+				pair[1],          # tag
+				score,            # raw tf-idf value
+				pair[0]           # original word
 			))
 		self.avg_score = total_score / n
 
