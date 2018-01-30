@@ -2,7 +2,7 @@ import glob
 import os
 import json
 from nltk import word_tokenize, pos_tag
-from utils import get_word_normal_form, is_word
+from .utils import get_word_normal_form, is_word
 from collections import OrderedDict
 from operator import itemgetter
 
@@ -10,23 +10,33 @@ from operator import itemgetter
 class TextCorpus:
 
 	def __init__(self):
-		self.words = {}
+		self.data = self.get_initial_data()
 		pass
 
+	@staticmethod
+	def get_initial_data():
+		return {
+			'documents': 0,
+			'termFrequencies': {}
+		}
+
 	def load_from_path(self, path, max_files=9223372036854775807):
-		self.words = {}
+		data = self.get_initial_data()
 		n = 0
 		path = os.path.normpath(path)
 		pattern = os.path.normpath(os.path.join(path, '**/*.*'))
 		print('Loading files in ' + pattern)
 		files = 0
-		total_files = sum([len(files) for r, d, files in os.walk(path)])
+		data['documents'] = sum([len(files) for r, d, files in os.walk(path)])
 		for filename in glob.iglob(
 			os.path.join(os.path.dirname(os.path.realpath(__file__)), os.path.normpath(pattern)),
 			recursive=True
 		):
 			files += 1
-			print('Files: ' + str(files) + '/' + str(total_files) + ', terms: ' + str(n), end='\r')
+			print(
+				'Files: ' + str(files) + '/' + str(data['documents']) + ', terms: ' + str(n),
+				end='\r'
+			)
 			words_in_this_file = set()
 			if files > max_files:
 				break
@@ -43,20 +53,31 @@ class TextCorpus:
 				if normalized_word in words_in_this_file:
 					continue
 				words_in_this_file.add(normalized_word)
-				if normalized_word in self.words:
-					self.words[normalized_word] += 1
+				if normalized_word in data['termFrequencies']:
+					data['termFrequencies'][normalized_word] += 1
 				else:
-					self.words[normalized_word] = 1
+					data['termFrequencies'][normalized_word] = 1
 					n += 1
 		print(
-			'Files: ' + str(files) + '/' + str(total_files) + ', terms: ' + str(n)
+			'Files: ' + str(files) + '/' + str(data['documents']) + ', terms: ' + str(n)
 			+ '; Load complete!'
 		)
+		self.data = data
 
 	def serialize(self, filename):
-		open(filename, 'w', encoding='utf8').write(
-			json.dumps(
-				OrderedDict(sorted(self.words.items(), key=itemgetter(1), reverse=True)),
-				ensure_ascii=False
-			)
+		data = self.data.copy()
+		data['termFrequencies'] = OrderedDict(
+			sorted(data['termFrequencies'].items(), key=itemgetter(1), reverse=True)
 		)
+		open(filename, 'w', encoding='utf8').write(
+			json.dumps(data, ensure_ascii=False, separators=(',', ':'))
+		)
+
+	def deserialize(self, filename):
+		if not os.path.isfile(filename):
+			return False
+		try:
+			self.data = json.loads(open(filename, 'r', encoding='utf8').read(), encoding='utf8')
+		except json.decoder.JSONDecodeError:
+			return False
+		return True
