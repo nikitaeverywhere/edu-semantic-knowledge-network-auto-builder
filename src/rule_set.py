@@ -1,4 +1,5 @@
 from .Rule import Rule
+from functools import reduce
 
 noun = Rule(['NN', 'NNS', 'NNP', 'NNPS', 'PRP'])
 compound_noun = Rule()
@@ -47,10 +48,30 @@ english = Rule([
 	(concept, functor, adverb, adjective)    # car | is | very | effective
 ], [
 	{
-		'from-base': lambda term_groups: term_groups[0][-1],
-		'from': lambda term_groups: ' '.join(term_groups[0]),
-		'link': lambda term_groups: ' '.join(term_groups[1]),
-		'to-base': lambda term_groups: term_groups[2][-1],
-		'to': lambda term_groups: ' '.join(term_groups[2])
+		'from-base': lambda **a: a['groups'][0][-1],
+		'from': lambda **a: ' '.join(a['groups'][0]),
+		'link': lambda **a: ' '.join(a['groups'][1]),
+		'to-base': lambda **a: a['groups'][2][-1],
+		'to': lambda **a: ' '.join(a['groups'][2]),
+		'index': lambda **a:
+			a['index'] + reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
+	},
+	{
+		'from-base': lambda **a: a['groups'][0][-1],
+		'from': lambda **a: ' '.join(a['groups'][0]),
+		'link': lambda **a: ' '.join(a['groups'][1]),
+		'to-base': lambda **a: a['groups'][3][-1],
+		'to': lambda **a: ' '.join(a['groups'][2]) + ' ' + ' '.join(a['groups'][3]),
+		'index': lambda **a:
+			a['index'] + reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
+	},
+	{
+		'from-base': lambda **a: a['groups'][0][-1],
+		'from': lambda **a: ' '.join(a['groups'][0]),
+		'link': lambda **a: ' '.join(a['groups'][1]),
+		'to-base': lambda **a: a['groups'][3][-1],
+		'to': lambda **a: ' '.join(a['groups'][2]) + ' ' + ' '.join(a['groups'][3]),
+		'index': lambda **a:
+			a['index'] + reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
 	}
 ])

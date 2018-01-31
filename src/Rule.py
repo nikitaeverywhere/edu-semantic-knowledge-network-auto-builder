@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 class Rule:
 
 	def __init__(self, cases=None, mutations=None):
@@ -14,13 +17,13 @@ class Rule:
 	def case(self, n):
 		return self.cases[n]
 
-	def mutate(self, context, n, term_groups):
+	def mutate(self, context, n, term_groups, start_index):
 		# [['very', 'beautiful', 'flower'], ['shocks'], ['me']]
 		if n >= len(self.mutations):
 			return context
 		mutation = self.mutations[n]
 		for prop, fun in mutation.items():
-			context[prop] = fun(term_groups)
+			context[prop] = fun(groups=term_groups, index=start_index)
 		return context
 
 	def apply(self, text, index, context=None):
@@ -38,7 +41,7 @@ class Rule:
 			if not isinstance(seq, tuple):
 				seq = tuple([seq])
 			term_groups = []
-			ctx = context.copy()
+			ctx = deepcopy(context)
 			pos = index
 			for case in seq:  # (..., ..., ...)
 				if pos >= len(text):
@@ -59,7 +62,7 @@ class Rule:
 					else:
 						break
 			else:  # executed if for (..., ..., ...) loop exits normally
-				ctx = self.mutate(ctx, n, term_groups)
+				ctx = self.mutate(ctx, n, term_groups, index)
 				terms = []
 				for group in term_groups:
 					for term in group:

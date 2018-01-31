@@ -25,7 +25,7 @@ def is_word(word, tag):
 
 def write_xlsx_file(filename, data=None):
 	directory = os.path.dirname(filename)
-	if not os.path.exists(directory):
+	if directory != '' and not os.path.exists(directory):
 		os.makedirs(directory)
 	workbook = xlsxwriter.Workbook(filename)
 	worksheet = workbook.add_worksheet("Sheet1")

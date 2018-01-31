@@ -18,10 +18,5 @@ print('Text of ' + str(len(text.terms)) + ' terms with average score of ' + str(
 
 net = Network(english)
 net.merge(text)
-print('To be continued...')
-
-terms, ctx = english.apply(
-	[('ink', 'NN'), ('helps', 'VBZ'), ('drive', 'JJ'), ('democracy', 'NN')],
-	0
-)
-print(terms, ctx)
+net.save_graph('test')
+print('Graph saved to test-edges.xlsx!')
