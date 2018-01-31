@@ -1,26 +1,56 @@
 from .Rule import Rule
 
-noun = Rule(['NN', 'NNS', 'NNP', 'NNPS'])
+noun = Rule(['NN', 'NNS', 'NNP', 'NNPS', 'PRP'])
 compound_noun = Rule()
-compound_noun.extend(tuple([noun, compound_noun]))
+compound_noun.extend([
+	(noun, 'POS', compound_noun),  # princess's cat
+	(noun, compound_noun),         # mister cat
+	noun                           # cat
+])
 verb = Rule(['VB', 'VBZ', 'VBD', 'VBG', 'VBN'])
-adverb = Rule(['RB', 'RBR', 'RBS'])
-adjective = Rule(['JJ', 'JJR', 'JJS'])
+determiner = Rule(['DT', 'WDT', 'PDT'])
+adverb = Rule([
+	'RB',                # occasionally, professionally
+	'RBR',               # bigger
+	(determiner, 'RBS')  # the biggest
+])
+adjective = Rule([
+	'JJ',                # beautiful
+	'JJR',               # beautifuler
+	(determiner, 'JJS')  # the beautifulest
+])
 list_of_adjectives = Rule()
-list_of_adjectives.extend(tuple([adjective, list_of_adjectives]))
+list_of_adjectives.extend([
+	(adjective, list_of_adjectives),   # funny fast little
+	adjective                          # fast
+])
+noun_with_adjectives = Rule([
+	compound_noun,                          # good morning
+	(list_of_adjectives, compound_noun)     # beautiful small garden
+])
 concept = Rule([
-	compound_noun,
-	('DT', compound_noun),
-	(list_of_adjectives, compound_noun),
+	noun_with_adjectives,                         # morning, good morning
+	(determiner, noun_with_adjectives),           # a car, a very nice car
 ])
 functor = Rule([
-	verb
+	verb,                 # using
+	(verb, verb),         # is using
+	(verb, 'PRP$'),       # using their
+	(verb, verb, 'PRP$')  # is using our
 ])
 
 # Language rule set
 
 english = Rule([
-	(concept, verb, concept),
-	(concept, verb, 'RP', concept),
-	(concept, verb, adverb, adjective)
+	(concept, functor, concept),             # a big man | likes | big girls
+	(concept, functor, adverb, concept),     # cat | is | the cutest, professionally trained | pet
+	(concept, functor, adverb, adjective)    # car | is | very | effective
+], [
+	{
+		'from-base': lambda term_groups: term_groups[0][-1],
+		'from': lambda term_groups: ' '.join(term_groups[0]),
+		'link': lambda term_groups: ' '.join(term_groups[1]),
+		'to-base': lambda term_groups: term_groups[2][-1],
+		'to': lambda term_groups: ' '.join(term_groups[2])
+	}
 ])
