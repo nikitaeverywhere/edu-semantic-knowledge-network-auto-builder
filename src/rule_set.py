@@ -3,7 +3,7 @@ from functools import reduce
 from .utils import clean_the
 
 
-noun = Rule(['NN', 'NNS', 'NNP', 'NNPS', 'PRP'])
+noun = Rule(['NN', 'NNS', 'NNP', 'NNPS'])
 compound_noun = Rule()
 compound_noun.extend([
 	(noun, 'POS', compound_noun),  # princess's cat
@@ -47,6 +47,7 @@ functor = Rule([
 
 english = Rule([
 	(concept, functor, concept),             # a big man | likes | big girls
+	(concept, 'IN', concept),                # a car in the truck
 	(concept, functor, adverb, concept),     # cat | is | the cutest, professionally trained | pet
 	(concept, functor, adverb, adjective)    # car | is | very | effective
 ], [
@@ -58,6 +59,15 @@ english = Rule([
 		'to': lambda **a: ' '.join(clean_the(a['groups'][2])),
 		'index': lambda **a:
 			a['index'] + reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
+	},
+	{
+		'from-base': lambda **a: a['groups'][0][-1],
+		'from': lambda **a: ' '.join(clean_the(a['groups'][0])),
+		'link': lambda **a: ' '.join(a['groups'][1]),
+		'to-base': lambda **a: a['groups'][2][-1],
+		'to': lambda **a: ' '.join(clean_the(a['groups'][2])),
+		'index': lambda **a:
+		a['index'] + reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
 	},
 	{
 		'from-base': lambda **a: a['groups'][0][-1],
