@@ -38,3 +38,11 @@ def write_xlsx_file(filename, data=None):
 		row_count += 1
 	workbook.close()
 
+
+def clean_the(txt):
+	text = []
+	for t in txt:
+		if t == 'the' or t == 'a':
+			continue
+		text.append(t)
+	return text

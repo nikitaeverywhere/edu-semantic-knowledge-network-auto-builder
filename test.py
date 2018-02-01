@@ -14,6 +14,7 @@ text_filename = os.path.join(
 print('Analyzing ' + text_filename)
 corpus = TextCorpus(os.path.join(current_dir, 'datasets/bbc-news.json'))
 text = Text(corpus, open(text_filename, mode='r', encoding='utf-8').read())
+text.dump('text.json')
 print('Text of ' + str(len(text.terms)) + ' terms with average score of ' + str(text.avg_score))
 
 net = Network(english)

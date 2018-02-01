@@ -68,13 +68,13 @@ class Network:
 		node_data = [["Id", "Label"]]
 		edge_data = [["Source", "Target", "Id", "Label", "Weight"]]
 		for node in self.nodes.values():
-			node_data.append([node["id"], '\n'.join(list(node["names"]))])
+			node_data.append([node["id"], ', '.join(list(node["names"]))])
 		for edge in self.edges.values():
 			edge_data.append([
 				edge["from"],
 				edge["to"],
-				edge["from"] + '|' + edge["to"],
-				'\n'.join(list(edge["names"])),
+				edge["from"] + '->' + edge["to"],
+				', '.join(list(edge["names"])),
 				edge["weight"]
 			])
 		write_xlsx_file(filename + "-nodes.xlsx", node_data)

@@ -1,6 +1,7 @@
 from nltk import word_tokenize, pos_tag
 from .utils import get_word_normal_form, is_word
 from collections import Counter
+import json
 
 
 class Text:
@@ -44,3 +45,8 @@ class Text:
 
 		self.terms = terms
 		return terms
+
+	def dump(self, filename='text.json'):
+		open(filename, 'w', encoding='utf8').write(json.dumps(
+			list(map(lambda x: list(x), self.terms)), ensure_ascii=False, indent=4
+		))
