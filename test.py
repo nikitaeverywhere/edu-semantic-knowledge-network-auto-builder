@@ -19,5 +19,5 @@ print('Text of ' + str(len(text.terms)) + ' terms with average score of ' + str(
 
 net = Network(english)
 net.merge(text)
-net.save_graph('test')
+net.save_graph('output/test')
 print('Graph saved to test-edges.xlsx!')
