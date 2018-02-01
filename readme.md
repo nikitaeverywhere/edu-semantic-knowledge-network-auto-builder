@@ -8,7 +8,7 @@ Preview
 
 Article [Ink helps drive democracy in Asia](http://news.bbc.co.uk/2/hi/technology/4276125.stm):
 
-![Graph](https://user-images.githubusercontent.com/4989256/35646980-ca425876-06d9-11e8-9c06-2e63b1ed2981.png)
+![2018-02-01_142301](https://user-images.githubusercontent.com/4989256/35678359-af18c3d2-075b-11e8-908b-49e8d9a495bc.png)
 
 Composites from many articles:
 

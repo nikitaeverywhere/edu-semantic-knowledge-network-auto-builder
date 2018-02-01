@@ -75,7 +75,7 @@ class Network:
 				edge["to"],
 				edge["from"] + '->' + edge["to"],
 				', '.join(list(edge["names"])),
-				edge["weight"]
+				1
 			])
 		write_xlsx_file(filename + "-nodes.xlsx", node_data)
 		write_xlsx_file(filename + "-edges.xlsx", edge_data)

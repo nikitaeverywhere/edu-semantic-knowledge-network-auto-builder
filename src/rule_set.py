@@ -24,8 +24,9 @@ adjective = Rule([
 ])
 list_of_adjectives = Rule()
 list_of_adjectives.extend([
-	(adjective, list_of_adjectives),   # funny fast little
-	adjective                          # fast
+	(adjective, ',', list_of_adjectives),  # small, funny kid
+	(adjective, list_of_adjectives),       # funny fast little
+	adjective                              # fast
 ])
 noun_with_adjectives = Rule([
 	(list_of_adjectives, compound_noun),    # beautiful small garden
