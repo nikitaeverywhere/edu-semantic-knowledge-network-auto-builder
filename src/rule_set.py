@@ -51,7 +51,8 @@ english = Rule([
 	(concept, functor, concept),             # a big man | likes | big girls
 	(concept, 'IN', concept),                # a car in the truck
 	(concept, functor, adverb, concept),     # cat | is | the cutest, professionally trained | pet
-	(concept, functor, adverb, adjective)    # car | is | very | effective
+	(concept, functor, adverb, adjective),   # car | is | very | effective
+	(concept, functor, adjective)            # drugs are harmful
 ], [
 	pick_groups(1, 1, 1, 3),
 	pick_groups(1, 1, 1, 3),
