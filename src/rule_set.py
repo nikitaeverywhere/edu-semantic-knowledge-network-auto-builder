@@ -9,7 +9,7 @@ compound_noun.extend([
 	(noun, compound_noun),         # mister cat
 	noun                           # cat
 ])
-verb = Rule(['VB', 'VBZ', 'VBD', 'VBG', 'VBN'])
+verb = Rule(['VB', 'VBZ', 'VBD', 'VBG', 'VBN', 'VBP'])
 determiner = Rule(['DT', 'WDT', 'PDT'])
 adverb = Rule([
 	(determiner, 'RBS'),  # the biggest
@@ -32,6 +32,7 @@ noun_with_adjectives = Rule([
 	compound_noun                           # good morning
 ])
 concept = Rule([
+	(adverb, adjective, noun),               # even greater record
 	(determiner, noun_with_adjectives),           # a car, a very nice car
 	noun_with_adjectives                          # morning, good morning
 ])
@@ -39,6 +40,7 @@ functor = Rule([
 	(verb, verb, 'PRP$'),  # is using our
 	(verb, verb),          # is using
 	(verb, 'PRP$'),        # using their
+	(verb, 'IN'),          # shows in
 	verb                   # using
 ])
 
