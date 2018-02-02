@@ -1,16 +1,23 @@
 from nltk import word_tokenize, pos_tag
 from .utils import get_word_normal_form, is_word
 from collections import Counter
-import json
 
 
 class Text:
 
 	def __init__(self, corpus, text='no text'):
 		self.avg_score = 0
+		self.max_score = 0
 		self.terms = []
+		self.usedTerms = {}  # positions of used terms
 		self.load_text(text, corpus)
 		pass
+
+	def mark_as_used(self, index, length=1):
+		i = 0
+		while i < length:
+			self.usedTerms[i + index] = True
+			i += 1
 
 	def load_text(self, text, corpus):
 
@@ -35,6 +42,8 @@ class Text:
 			score = term_freq[word_normalized] * corpus.get_idf(word_normalized)
 			n += 1
 			total_score += score
+			if score > self.max_score:
+				self.max_score = score
 			terms.append((
 				word_normalized,  # normalized word
 				pair[1],          # tag
@@ -45,8 +54,3 @@ class Text:
 
 		self.terms = terms
 		return terms
-
-	def dump(self, filename='text.json'):
-		open(filename, 'w', encoding='utf8').write(json.dumps(
-			list(map(lambda x: list(x), self.terms)), ensure_ascii=False, indent=4
-		))

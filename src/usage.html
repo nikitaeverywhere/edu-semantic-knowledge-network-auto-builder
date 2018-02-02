@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Information Usage</title>
+	<script type="text/javascript">
+		const data = [/*replace:data*/][0]; // {texts:[{maxScore:1,entities:[['',P,s,'',i]]}]}
+		function init () {
+			for (const text of data.texts) {
+				const div = document.createElement(`div`);
+				for (const entity of text.entities) {
+					const element = document.createElement(`div`);
+					const pos = document.createElement(`div`);
+					pos.className = `pos`;
+					pos.textContent = entity[1];
+					element.className = `entity`;
+					element.textContent = entity[3];
+					element.style.color = `rgb(${
+						Math.round(255 * Math.pow(entity[2] / text.maxScore, 0.15))
+					},0,0)`;
+					if (entity[4])
+						element.classList.add("used");
+					if (entity[2] >= text.avgScore)
+						element.classList.add("considered");
+					element.appendChild(pos);
+					div.appendChild(element);
+				}
+				document.body.appendChild(div);
+			}
+		}
+	</script>
+	<style type="text/css">
+		body {
+			text-align: justify;
+		}
+		body .entity {
+			position: relative;
+			display: inline-block;
+			padding: 5px 3px 2px 3px;
+			border-radius: 6px;
+			margin: 2px 1px;
+		}
+		body .entity .pos {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 1px;
+			font-size: 7px;
+			text-align: center;
+			color: #888;
+			font-weight: bold;
+		}
+		.used {
+			background-color: #60ccff;
+		}
+		.considered {
+			text-decoration: underline;
+		}
+	</style>
+</head>
+<body onload="init()">
+	<h1>
+		The <span class="used">Picked</span> and <span class="considered">Considered</span>
+		<span class="entity">Entities<span class="pos">NNP</span></span> In Texts:
+	</h1>
+</body>
+</html>

@@ -17,13 +17,13 @@ class Rule:
 	def case(self, n):
 		return self.cases[n]
 
-	def mutate(self, context, n, term_groups, start_index):
+	def mutate(self, context, n, term_groups):
 		# [['very', 'beautiful', 'flower'], ['shocks'], ['me']]
 		if n >= len(self.mutations):
 			return context
 		mutation = self.mutations[n]
 		for prop, fun in mutation.items():
-			context[prop] = fun(groups=term_groups, index=start_index)
+			context[prop] = fun(groups=term_groups)
 		return context
 
 	def apply(self, text, index, context=None):
@@ -62,7 +62,7 @@ class Rule:
 					else:
 						break
 			else:  # executed if for (..., ..., ...) loop exits normally
-				ctx = self.mutate(ctx, n, term_groups, index)
+				ctx = self.mutate(ctx, n, term_groups)
 				terms = []
 				for group in term_groups:
 					for term in group:

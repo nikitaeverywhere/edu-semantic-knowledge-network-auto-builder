@@ -16,7 +16,7 @@ Composites from many articles:
 ![2018-02-01_130034](https://user-images.githubusercontent.com/4989256/35675269-10bd0280-0750-11e8-925d-75078583751a.png)
 
 Requirements & Setup
-------------
+--------------------
 
 1. Python v3 with pip3
 2. Git

@@ -1,4 +1,16 @@
 from .utils import write_xlsx_file
+from os import path
+import json
+
+
+def list_append(lst, item):
+	lst.append(item)
+	return lst
+
+
+current_dir = path.dirname(path.abspath(__file__))
+in_html_file = path.normpath(path.join(current_dir, 'usage.html'))
+out_html_file = path.normpath(path.join(current_dir, '../output/usage.html'))
 
 
 class Network:
@@ -10,6 +22,7 @@ class Network:
 		self.edges = {}
 		self.nodes = {}
 		self.rule_set = rule_set
+		self.texts = []
 		pass
 
 	def add_node(self, node_id, name, weight=1):
@@ -44,12 +57,14 @@ class Network:
 		:param text: Text instance with loaded text
 		:return: Boolean
 		"""
+		self.texts.append(text)
 		index = 0
 		while index < len(text.terms):
 			words, context = self.rule_set.apply(text.terms, index)
 			if len(words) == 0:
 				index += 1
 				continue
+			text.mark_as_used(index, len(words))
 			if 'from' in context and 'to' in context and 'link' in context:
 				from_base = context['from-base'] if 'from-base' in context else context['from']
 				to_base = context['to-base'] if 'to-base' in context else context['to']
@@ -57,7 +72,7 @@ class Network:
 				self.add_node(to_base, context['to'])
 				self.add_edge(from_base, to_base, context['link'] if 'link' in context else '?')
 			if 'index' in context:
-				index = context['index']
+				index += context['index']
 			else:
 				index += 1
 
@@ -79,3 +94,21 @@ class Network:
 			])
 		write_xlsx_file(filename + "-nodes.xlsx", node_data)
 		write_xlsx_file(filename + "-edges.xlsx", edge_data)
+
+	def log_to_html(self):
+		data = {
+			'texts': []
+		}
+		for text in self.texts:
+			data['texts'].append({
+				'entities': [
+					list_append(list(x), text.usedTerms[i] if i in text.usedTerms else False)
+					for i, x in enumerate(text.terms)
+				],
+				'maxScore': text.max_score,
+				'avgScore': text.avg_score
+			})
+
+		content = open(in_html_file, 'r', encoding='utf8').read() \
+			.replace('/*replace:data*/', json.dumps(data, ensure_ascii=False))
+		open(out_html_file, 'w', encoding='utf8').write(content)

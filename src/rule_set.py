@@ -58,8 +58,7 @@ english = Rule([
 		'link': lambda **a: ' '.join(a['groups'][1]),
 		'to-base': lambda **a: a['groups'][2][-1],
 		'to': lambda **a: ' '.join(clean_the(a['groups'][2])),
-		'index': lambda **a:
-			a['index'] + reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
+		'index': lambda **a: reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
 	},
 	{
 		'from-base': lambda **a: a['groups'][0][-1],
@@ -67,8 +66,7 @@ english = Rule([
 		'link': lambda **a: ' '.join(a['groups'][1]),
 		'to-base': lambda **a: a['groups'][2][-1],
 		'to': lambda **a: ' '.join(clean_the(a['groups'][2])),
-		'index': lambda **a:
-		a['index'] + reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
+		'index': lambda **a: reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
 	},
 	{
 		'from-base': lambda **a: a['groups'][0][-1],
@@ -76,8 +74,7 @@ english = Rule([
 		'link': lambda **a: ' '.join(a['groups'][1]),
 		'to-base': lambda **a: a['groups'][3][-1],
 		'to': lambda **a: ' '.join(clean_the(a['groups'][2])) + ' ' + ' '.join(clean_the(a['groups'][3])),
-		'index': lambda **a:
-			a['index'] + reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
+		'index': lambda **a: reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
 	},
 	{
 		'from-base': lambda **a: a['groups'][0][-1],
@@ -85,7 +82,6 @@ english = Rule([
 		'link': lambda **a: ' '.join(a['groups'][1]),
 		'to-base': lambda **a: a['groups'][3][-1],
 		'to': lambda **a: ' '.join(clean_the(a['groups'][2])) + ' ' + ' '.join(clean_the(a['groups'][3])),
-		'index': lambda **a:
-			a['index'] + reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
+		'index': lambda **a: reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
 	}
 ])
