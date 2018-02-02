@@ -1,5 +1,6 @@
 import xlsxwriter
 import os
+from functools import reduce
 
 symbol_tags = {'$', '\'\'', '(', ')', ',', '--', '.', ':', '``', 'POS'}
 
@@ -42,7 +43,43 @@ def write_xlsx_file(filename, data=None):
 def clean_the(txt):
 	text = []
 	for t in txt:
+		t = t.lower()
 		if t == 'the' or t == 'a':
 			continue
 		text.append(t)
 	return text
+
+
+def pick_groups(terms1, verbs, terms2, next_index=3):
+	"""
+	Returns a set of lambdas which return the correct word(s)/tuples to be assigned to a key prop.
+	:param terms1:
+	:param verbs:
+	:param terms2:
+	:param next_index
+	:return:
+	"""
+	return {
+		'from-base': lambda **a: a['groups'][terms1 - 1][-1][0],
+		'from': lambda **a: ' '.join(
+			[' '.join(clean_the(list(map(lambda t: t[3], a['groups'][x])))) for x in range(
+				0, terms1
+			)]
+		),
+		'link': lambda **a: ' '.join(
+			[' '.join(list(map(lambda t: t[3], a['groups'][x]))) for x in range(
+				terms1, terms1 + verbs
+			)]
+		),
+		'to-base': lambda **a: a['groups'][terms1 + verbs + terms2 - 1][-1][0],
+		'to': lambda **a: ' '.join(
+			[' '.join(clean_the(list(map(lambda t: t[3], a['groups'][x])))) for x in range(
+				terms1 + verbs, terms1 + verbs + terms2
+			)]
+		),
+		'index': lambda **a: reduce(
+			lambda acc, terms:
+				acc + len(terms), a['groups'][:(next_index - (terms1 + verbs + terms2) - 1)],
+			0
+		)
+	}

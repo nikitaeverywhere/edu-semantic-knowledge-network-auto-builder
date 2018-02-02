@@ -1,6 +1,5 @@
 from .Rule import Rule
-from functools import reduce
-from .utils import clean_the
+from .utils import pick_groups
 
 
 noun = Rule(['NN', 'NNS', 'NNP', 'NNPS'])
@@ -52,36 +51,8 @@ english = Rule([
 	(concept, functor, adverb, concept),     # cat | is | the cutest, professionally trained | pet
 	(concept, functor, adverb, adjective)    # car | is | very | effective
 ], [
-	{
-		'from-base': lambda **a: a['groups'][0][-1],
-		'from': lambda **a: ' '.join(clean_the(a['groups'][0])),
-		'link': lambda **a: ' '.join(a['groups'][1]),
-		'to-base': lambda **a: a['groups'][2][-1],
-		'to': lambda **a: ' '.join(clean_the(a['groups'][2])),
-		'index': lambda **a: reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
-	},
-	{
-		'from-base': lambda **a: a['groups'][0][-1],
-		'from': lambda **a: ' '.join(clean_the(a['groups'][0])),
-		'link': lambda **a: ' '.join(a['groups'][1]),
-		'to-base': lambda **a: a['groups'][2][-1],
-		'to': lambda **a: ' '.join(clean_the(a['groups'][2])),
-		'index': lambda **a: reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
-	},
-	{
-		'from-base': lambda **a: a['groups'][0][-1],
-		'from': lambda **a: ' '.join(clean_the(a['groups'][0])),
-		'link': lambda **a: ' '.join(a['groups'][1]),
-		'to-base': lambda **a: a['groups'][3][-1],
-		'to': lambda **a: ' '.join(clean_the(a['groups'][2])) + ' ' + ' '.join(clean_the(a['groups'][3])),
-		'index': lambda **a: reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
-	},
-	{
-		'from-base': lambda **a: a['groups'][0][-1],
-		'from': lambda **a: ' '.join(clean_the(a['groups'][0])),
-		'link': lambda **a: ' '.join(a['groups'][1]),
-		'to-base': lambda **a: a['groups'][3][-1],
-		'to': lambda **a: ' '.join(clean_the(a['groups'][2])) + ' ' + ' '.join(clean_the(a['groups'][3])),
-		'index': lambda **a: reduce(lambda acc, terms: acc + len(terms), a['groups'][:-1], 0)
-	}
+	pick_groups(1, 1, 1, 3),
+	pick_groups(1, 1, 1, 3),
+	pick_groups(1, 1, 2, 3),
+	pick_groups(1, 1, 2, 3)
 ])

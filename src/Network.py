@@ -57,14 +57,28 @@ class Network:
 		:param text: Text instance with loaded text
 		:return: Boolean
 		"""
+
 		self.texts.append(text)
 		index = 0
+		threshold = text.avg_score
+
 		while index < len(text.terms):
-			words, context = self.rule_set.apply(text.terms, index)
-			if len(words) == 0:
+
+			terms, context = self.rule_set.apply(text.terms, index)
+			if len(terms) == 0:
 				index += 1
 				continue
-			text.mark_as_used(index, len(words))
+			text.mark_terms_as_considered(index, len(terms))
+
+			max_score_in_group = 0
+			for term in terms:
+				if term[2] > max_score_in_group:
+					max_score_in_group = term[2]
+			if max_score_in_group < threshold:
+				index += 1
+				continue
+
+			text.mark_terms_as_used(index, len(terms))
 			if 'from' in context and 'to' in context and 'link' in context:
 				from_base = context['from-base'] if 'from-base' in context else context['from']
 				to_base = context['to-base'] if 'to-base' in context else context['to']
@@ -96,14 +110,21 @@ class Network:
 		write_xlsx_file(filename + "-edges.xlsx", edge_data)
 
 	def log_to_html(self):
+		print('Logging results to ' + out_html_file + '...', end='')
 		data = {
 			'texts': []
 		}
 		for text in self.texts:
 			data['texts'].append({
 				'entities': [
-					list_append(list(x), text.usedTerms[i] if i in text.usedTerms else False)
-					for i, x in enumerate(text.terms)
+					{
+						'id': x[0],
+						'tag': x[1],
+						'score': x[2],
+						'text': x[3],
+						'used': i in text.used_terms,
+						'considered': i in text.considered_terms
+					} for i, x in enumerate(text.terms)
 				],
 				'maxScore': text.max_score,
 				'avgScore': text.avg_score
@@ -112,3 +133,4 @@ class Network:
 		content = open(in_html_file, 'r', encoding='utf8').read() \
 			.replace('/*replace:data*/', json.dumps(data, ensure_ascii=False))
 		open(out_html_file, 'w', encoding='utf8').write(content)
+		print(' Done.')

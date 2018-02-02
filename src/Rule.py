@@ -48,7 +48,7 @@ class Rule:
 					break
 				if isinstance(case, str):
 					if text[pos][1] == case:
-						term_groups.append([text[pos][0]])
+						term_groups.append([text[pos]])
 						pos += 1
 						# return [text[pos][0]], self.mutate(context, n, [[text[pos][0]]])
 					else:

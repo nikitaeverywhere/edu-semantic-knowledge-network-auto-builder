@@ -9,14 +9,21 @@ class Text:
 		self.avg_score = 0
 		self.max_score = 0
 		self.terms = []
-		self.usedTerms = {}  # positions of used terms
+		self.used_terms = set()  # positions of used terms
+		self.considered_terms = set()
 		self.load_text(text, corpus)
 		pass
 
-	def mark_as_used(self, index, length=1):
+	def mark_terms_as_used(self, index, length=1):
 		i = 0
 		while i < length:
-			self.usedTerms[i + index] = True
+			self.used_terms.add(i + index)
+			i += 1
+
+	def mark_terms_as_considered(self, index, length=1):
+		i = 0
+		while i < length:
+			self.considered_terms.add(i + index)
 			i += 1
 
 	def load_text(self, text, corpus):

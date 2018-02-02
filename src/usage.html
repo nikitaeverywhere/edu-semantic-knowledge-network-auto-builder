@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Information Usage</title>
 	<script type="text/javascript">
-		const data = [/*replace:data*/][0]; // {texts:[{maxScore:1,entities:[['',P,s,'',i]]}]}
+		const data = [/*replace:data*/][0]; // {texts:[{maxScore:1,entities:[{...}]}]}
 		function init () {
 			for (const text of data.texts) {
 				const div = document.createElement(`div`);
@@ -12,16 +12,15 @@
 					const element = document.createElement(`div`);
 					const pos = document.createElement(`div`);
 					pos.className = `pos`;
-					pos.textContent = entity[1];
+					pos.textContent = entity.tag;
 					element.className = `entity`;
-					element.textContent = entity[3];
+					element.textContent = entity.text;
 					element.style.color = `rgb(${
-						Math.round(255 * Math.pow(entity[2] / text.maxScore, 0.15))
+						Math.round(255 * Math.pow(entity.score / text.maxScore, 0.15))
 					},0,0)`;
-					if (entity[4])
-						element.classList.add("used");
-					if (entity[2] >= text.avgScore)
-						element.classList.add("considered");
+					if (entity.considered) element.classList.add("considered");
+					if (entity.used) element.classList.add("used");
+					if (entity.score >= text.avgScore) element.classList.add("important");
 					element.appendChild(pos);
 					div.appendChild(element);
 				}
@@ -51,16 +50,20 @@
 			font-weight: bold;
 		}
 		.used {
-			background-color: #60ccff;
+			background-color: #60ccff !important;
 		}
 		.considered {
+			background-color: #d0e2e8;
+		}
+		.important {
 			text-decoration: underline;
 		}
 	</style>
 </head>
 <body onload="init()">
 	<h1>
-		The <span class="used">Picked</span> and <span class="considered">Considered</span>
+		The <span class="used">Picked</span>, <span class="considered">Considered</span> and
+		<span class="important">important</span>
 		<span class="entity">Entities<span class="pos">NNP</span></span> In Texts:
 	</h1>
 </body>
