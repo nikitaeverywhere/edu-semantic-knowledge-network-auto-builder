@@ -22,11 +22,10 @@ class TextCorpus:
 		}
 
 	def get_idf(self, term):
-		return math.log(
-			self.data['documents'] / max(1, min(1 + (
-				self.data['termFrequencies'][term] if term in self.data['termFrequencies'] else 0
-			), self.data['documents']))
-		)
+		f = self.data['termFrequencies'][term] if term in self.data['termFrequencies'] else 0
+		if f > self.data['documents'] / 5:
+			return 0
+		return math.log(self.data['documents'] / max(1, min(1 + f, self.data['documents'])))
 
 	def load_from_path(self, path, max_files=9223372036854775807):
 		data = self.get_initial_data()
