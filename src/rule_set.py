@@ -14,7 +14,7 @@ determiner = Rule(['DT', 'WDT', 'PDT'])
 adverb = Rule([
 	(determiner, 'RBS'),  # the biggest
 	'RB',                 # occasionally, professionally
-	'RBR'                # bigger
+	'RBR'                 # bigger
 ])
 adjective = Rule([
 	(determiner, 'JJS'),  # the beautifulest
@@ -32,18 +32,22 @@ noun_with_adjectives = Rule([
 	compound_noun                           # good morning
 ])
 concept = Rule([
-	(adverb, adjective, noun),               # even greater record
+	(adverb, adjective, noun),                    # even greater record
 	(determiner, noun_with_adjectives),           # a car, a very nice car
 	noun_with_adjectives                          # morning, good morning
 ])
-functor = Rule([
+baseFunctor = Rule([
 	(verb, verb, 'PRP$'),  # is using our
+	(verb, verb, 'IN'),    # shows in
 	(verb, verb),          # is using
-	(verb, 'PRP$'),        # using their
+	(verb, 'PRP$'),        # use their
 	(verb, 'IN'),          # shows in
 	verb                   # using
 ])
-
+functor = Rule([
+	('MD', baseFunctor),
+	baseFunctor
+])
 
 # Language rule set
 
