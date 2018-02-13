@@ -54,17 +54,19 @@ functor = Rule([
 # Language rule set
 
 english = Rule([
-	(concept, functor, concept),             # a big man | likes | big girls
-	(concept, 'IN', concept),                # a car in the truck
-	(concept, 'TO', concept),                # an addiction to a game
-	(concept, functor, adverb, concept),     # cat | is | the cutest, professionally trained | pet
-	(concept, functor, adverb, adjective),   # car | is | very | effective
-	(concept, functor, adjective)            # drugs are harmful
+	(concept, functor, concept),                         # a big man | likes | big girls
+	(concept, 'IN', concept),                            # a car in the truck
+	(concept, 'TO', concept),                            # an addiction to a game
+	(concept, functor, adverb, concept),                 # cat | is | professionally trained | pet
+	(concept, functor, adverb, adjective),               # car | is | very | effective
+	(concept, functor, adverb, 'TO', functor, concept),  # people are not doing enough to do future
+	(concept, functor, adjective)                        # drugs are harmful
 ], [
 	pick_groups(1, 1, 1, 3),
 	pick_groups(1, 1, 1, 3),
 	pick_groups(1, 1, 1, 3),
 	pick_groups(1, 1, 2, 3),
 	pick_groups(1, 1, 2, 3),
+	pick_groups(1, 4, 1, 6),
 	pick_groups(1, 1, 1, 3)
 ])
