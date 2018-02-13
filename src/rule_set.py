@@ -23,6 +23,7 @@ adjective = Rule([
 ])
 list_of_adjectives = Rule()
 list_of_adjectives.extend([
+	(adjective, 'CC', adjective),
 	(adjective, ',', list_of_adjectives),  # small, funny kid
 	(adjective, list_of_adjectives),       # funny fast little
 	adjective                              # fast
@@ -39,6 +40,7 @@ concept = Rule([
 baseFunctor = Rule([
 	(verb, verb, 'PRP$'),  # is using our
 	(verb, verb, 'IN'),    # shows in
+	(verb, adverb, verb),  # has often being
 	(verb, verb),          # is using
 	(verb, 'PRP$'),        # use their
 	(verb, 'IN'),          # shows in
@@ -54,12 +56,15 @@ functor = Rule([
 english = Rule([
 	(concept, functor, concept),             # a big man | likes | big girls
 	(concept, 'IN', concept),                # a car in the truck
+	(concept, 'TO', concept),                # an addiction to a game
 	(concept, functor, adverb, concept),     # cat | is | the cutest, professionally trained | pet
 	(concept, functor, adverb, adjective),   # car | is | very | effective
 	(concept, functor, adjective)            # drugs are harmful
 ], [
 	pick_groups(1, 1, 1, 3),
 	pick_groups(1, 1, 1, 3),
+	pick_groups(1, 1, 1, 3),
 	pick_groups(1, 1, 2, 3),
-	pick_groups(1, 1, 2, 3)
+	pick_groups(1, 1, 2, 3),
+	pick_groups(1, 1, 1, 3)
 ])

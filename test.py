@@ -8,7 +8,7 @@ import os
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 text_filename = os.path.join(
-	current_dir, 'datasets/bbc-news/news/tech/ink-helps-drive-democracy-in-asia.txt'
+	current_dir, 'datasets/bbc-news/news/tech/losing-yourself-in-online-gaming.txt'
 )
 
 print('Analyzing ' + text_filename)
