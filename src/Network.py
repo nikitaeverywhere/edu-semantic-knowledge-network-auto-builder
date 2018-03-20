@@ -15,7 +15,7 @@ out_html_file = path.normpath(path.join(current_dir, '../output/usage.html'))
 
 class Network:
 
-	def __init__(self, rule_set):
+	def __init__(self, rule_set, threshold = None):
 		"""
 		:param rule_set: Rule
 		"""
@@ -23,6 +23,7 @@ class Network:
 		self.nodes = {}
 		self.rule_set = rule_set
 		self.texts = []
+		self.threshold = threshold
 		pass
 
 	def add_node(self, node_id, name, weight=1):
@@ -60,7 +61,7 @@ class Network:
 
 		self.texts.append(text)
 		index = 0
-		threshold = text.avg_score
+		threshold = text.avg_score if self.threshold == None else self.threshold
 
 		while index < len(text.terms):
 
