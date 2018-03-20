@@ -21,16 +21,23 @@ Requirements & Setup
 1. Python v3 with pip3
 2. Git
 
-Clone this repository and install requirements:
+Clone this repository and install all prerequisites:
 
 ```bash
 git clone --recursive https://github.com/ZitRos/edu-semantic-knowledge-network-auto-builder
 cd edu-semantic-knowledge-network-auto-builder
 pip3 install -r requirements.txt
+py setup.py
 ```
 
 Additionally, when running scripts from this repository, `nltk` may ask you to download more 
 modules. Follow the command line instructions then.
+
+To run a sample graph building, use this:
+
+```bash
+py test.py
+```
 
 License
 -------
