@@ -33,10 +33,11 @@ py setup.py
 Additionally, when running scripts from this repository, `nltk` may ask you to download more 
 modules. Follow the command line instructions then.
 
-To run a sample graph building, use this:
+To run a sample graph building from multiple texts, put those texts in `input` directory and use this
+to generate graph to `output` directory:
 
 ```bash
-py test.py
+py process.py
 ```
 
 License
