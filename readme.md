@@ -18,10 +18,10 @@ Composites from many articles:
 Requirements & Setup
 --------------------
 
-1. Python v3 with pip3
+1. Python v3 with pip3 (or any other dependency manager)
 2. Git
 
-Clone this repository and install all prerequisites:
+Clone this repository (recursively!) and install all prerequisites:
 
 ```bash
 git clone --recursive https://github.com/ZitRos/edu-semantic-knowledge-network-auto-builder
@@ -38,6 +38,14 @@ to generate graph to `output` directory:
 
 ```bash
 py process.py
+```
+
+If you want to change the number of entities/concepts which appear in the resulting graph, please use
+the `--threshold` option. It specifies the TF-IDF threshold value below which concepts won't move to
+the resulting graph.
+
+```bash
+py process.py --threshold=10
 ```
 
 License
