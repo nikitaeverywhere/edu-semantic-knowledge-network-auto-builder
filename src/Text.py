@@ -5,13 +5,14 @@ from collections import Counter
 
 class Text:
 
-	def __init__(self, corpus, text='no text'):
+	def __init__(self, corpus, text='no text', name='?'):
 		self.avg_score = 0
 		self.max_score = 0
 		self.terms = []
 		self.used_terms = set()  # positions of used terms
 		self.considered_terms = set()
 		self.load_text(text, corpus)
+		self.name = name
 		pass
 
 	def mark_terms_as_used(self, index, length=1):

@@ -8,6 +8,9 @@
 		function init () {
 			for (const text of data.texts) {
 				const div = document.createElement(`div`);
+				const head = document.createElement(`h3`);
+				head.textContent = text.name;
+				div.appendChild(head);
 				for (const entity of text.entities) {
 					const element = document.createElement(`div`);
 					const pos = document.createElement(`div`);

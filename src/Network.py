@@ -62,6 +62,7 @@ class Network:
 		self.texts.append(text)
 		index = 0
 		threshold = text.avg_score if self.threshold == None else self.threshold
+		print('Using threshold ' + str(threshold) + ' for text ' + text.name)
 
 		while index < len(text.terms):
 
@@ -128,7 +129,8 @@ class Network:
 					} for i, x in enumerate(text.terms)
 				],
 				'maxScore': text.max_score,
-				'avgScore': text.avg_score
+				'avgScore': text.avg_score,
+				'name': text.name
 			})
 
 		content = open(in_html_file, 'r', encoding='utf8').read() \
