@@ -48,6 +48,12 @@ the resulting graph.
 py process.py --threshold=10
 ```
 
+Visualizing
+-----------
+
+You can feed the output file to any graph visualization software like [Gephi](https://gephi.org/) (the
+one which was used to generate images above).
+
 License
 -------
 
